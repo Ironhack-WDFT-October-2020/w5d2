@@ -3,7 +3,13 @@
   <input type="text" name="title" id="title">
 
   <label for="author">Author: </label>
-  <input type="text" name="author" id="author">
+  {{!-- <input type="text" name="author" id="author"> --}}
+
+  <select name="author" id="">
+    {{#each authors}}
+    <option value="{{_id}}">{{name}} {{lastName}}</option>
+    {{/each}}
+  </select>
 
   <label for="description">Description: </label>
   <input type="text" name="description" id="description">
