@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Celebrity = require('../models/celebrity');
-
+const Movie = require('../models/movie')
 mongoose.connect('mongodb://localhost/lab-mongoose-movies', {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -34,6 +34,29 @@ const celebrities = [
   }
 
 ];
+
+
+
+const movies = [{
+  title: " The shawshank redemption",
+  plot: "a man in..",
+  genre: "unknown3",
+},
+{
+  title: "The dark",
+  plot: "a drama..",
+  genre: "not know"
+}]
+
+Movie.insertMany(movies)
+  .then(result => {
+    console.log('Seed successfull');
+    mongoose.connection.close();
+  })
+  .catch(err => {
+    console.log(`An error occured: ${err}`);
+  });
+
 Celebrity.insertMany(celebrities)
   .then(result => {
     console.log('Seed successfull');
