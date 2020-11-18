@@ -4,9 +4,14 @@
 <h3>Genre: {{this.genre}}</h3>
 <h3>Plot: {{this.plot}}</h3>
 <a href="/movies/{{this._id}}/edit">Edit the {{this.title}}</a>
+
 <ul>
-    <li>{{this.cast.name}}</li>
+    {{#each this.cast}}
+    <li>{{this.name}}</li>
+    {{/each}}
+
 </ul>
+
 {{/each}}
 
 

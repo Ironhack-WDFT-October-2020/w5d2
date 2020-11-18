@@ -1,15 +1,17 @@
 <form action="/movies" method="POST"> 
+    <label for="title">title</label>
     <input type="text" name = "title">
+    <label for="genre">genre</label>
     <input type="text" name = "genre">
+    <label for="plot">plot</label>
     <input type="text" name = "plot">
-    
-    <button type="submit">Add the movie</button>
-   
+
+      <label for="celebrityName">Celebrity Name</label>
      <select name="celebrityName" id="celebSelect"  multiple>
          {{#each celebData}}
-         <option value="{{this.name}}">{{this.name}}</option>
+         <option value="{{this._id}}">{{this.name}}</option>
          {{/each}}
      </select>
-    
+      <button type="submit">Add the movie</button>
 </form>
  

@@ -2,7 +2,13 @@ const express = require('express');
 const router = express.Router();
 const Celebrity = require('../models/celebrity');
 const Movie = require('../models/movie');
- Celebrity.find().then(data=> console.log(data))
+ Movie.find().populate('cast').then(data=> 
+    data.forEach(e => {
+        console.log(e.cast)
+    })
+    )
+
+
 router.get('/movies/new', (req,res,next) => {
     Celebrity.find()
     .then(data => res.render('movies/new', {celebData:data}) )
@@ -40,17 +46,9 @@ router.post('/movies/:id', (req,res,next) =>{
 } )
 router.post('/movies', (req,res,next) => {
     const {title, genre, plot, celebrityName} = req.body
-    celebrityName.forEach(celeb => {
-        Celebrity.find({name:celeb})
-        .then((data) => {
-            data.forEach(data => {
-                Movie.create({title, genre, plot, cast:data._id})
-                .then(res.redirect('/movies'))
-                .catch(err => next(err))
-            })
-        })
-        .catch(err => next(err))
-    });
+     Movie.create({title:title, genre:genre, plot:plot, cast:celebrityName})
+     .then( data => res.redirect('/movies'))
+    .catch(err => next(err))
     
 })
 
