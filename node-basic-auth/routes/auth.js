@@ -7,6 +7,33 @@ router.get('/signup', (req, res) => {
   res.render('signup');
 });
 
+router.get('/login', (req, res) => {
+  res.render('login');
+});
+
+router.post('/login', (req, res, next) => {
+  // get username and password
+  const { username, password } = req.body;
+  // check if username is correct -> exists in our database if not render login again
+  User.findOne({ username: username })
+    .then(found => {
+      if (found === null) {
+        res.render('login', { message: 'Invalid credentials' })
+      }
+      // username exists in our database
+      // check if the password matches the password for that user in the database
+      if (bcrypt.compareSync(password, found.password)) {
+        // password and hash match
+        // login the user
+        req.session.user = found;
+        res.redirect('/');
+      } else {
+        res.render('login', { message: 'Invalid credentials' })
+      }
+    })
+});
+
+
 router.post('/signup', (req, res, next) => {
   // check if the password is long enough and username is not empty
   const { username, password } = req.body;
@@ -28,8 +55,9 @@ router.post('/signup', (req, res, next) => {
         const hash = bcrypt.hashSync(password, salt);
         User.create({ username: username, password: hash })
           .then(dbUser => {
-            // log in or 
-            res.redirect('/login');
+            // log in
+            req.session.user = dbUser;
+            res.redirect('/');
           })
           .catch(err => {
             // console.log(err);
@@ -37,6 +65,16 @@ router.post('/signup', (req, res, next) => {
           })
       }
     })
+});
+
+router.get('/logout', (req, res, next) => {
+  req.session.destroy(err => {
+    if (err) {
+      next(err);
+    } else {
+      res.redirect('/')
+    }
+  })
 });
 
 
